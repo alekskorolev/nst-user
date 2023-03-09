@@ -14,7 +14,7 @@ export class ProfileService {
   }
 
   public getAll(): Promise<Profile[]> {
-    return this.repository.find({ where: { isDeleted: false } })
+    return this.repository.find({ where: { isDeleted: false } });
   }
 
   public createProfile(body: CreateProfileDto): Promise<Profile> {

@@ -5,20 +5,20 @@ import { CreateCredentialDto } from './credential.dto';
 @Controller('basic')
 export class BasicController {
   @Inject(BasicService)
-  private readonly service: BasicService
+  private readonly service: BasicService;
 
   @Get()
   getSession() {
-    return {}
+    return {};
   }
 
   @Post('auth')
   public async auth(@Body() body: CreateCredentialDto): Promise<boolean> {
-    return this.service.check(body)
+    return this.service.validate(body);
   }
 
   @Post('register')
   public async register(@Body() body: CreateCredentialDto): Promise<boolean> {
-    return this.service.create(body)
+    return this.service.create(body);
   }
 }

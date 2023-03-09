@@ -9,19 +9,19 @@ export class ProfileController {
   private readonly service: ProfileService;
 
   @Get(':id')
-  public async getProfile(@Param('id') id: string): Promise<Profile>{
+  public async getProfile(@Param('id') id: string): Promise<Profile> {
     const profile = await this.service.getProfile(id);
     return profile;
   }
   @Get()
-  public async getAll(): Promise<Profile[]>{
-    const profiles = await this.service.getAll()
-    return profiles
+  public async getAll(): Promise<Profile[]> {
+    const profiles = await this.service.getAll();
+    return profiles;
   }
 
   @Post()
   public async register(@Body() body: CreateProfileDto): Promise<Profile> {
-    const profile = await this.service.createProfile(body)
-    return profile
+    const profile = await this.service.createProfile(body);
+    return profile;
   }
 }

@@ -1,4 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, PrimaryColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  PrimaryColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
+import { Profile } from 'src/profile/profile.entity';
 
 @Entity()
 export class Credential {
@@ -10,6 +20,11 @@ export class Credential {
 
   @Column({ type: 'varchar', length: 60, nullable: false })
   public password: string;
+
+  @OneToOne(() => Profile)
+  @JoinColumn()
+  profile: Profile;
+
   /*0
    * Create and Update Date Columns
    */
