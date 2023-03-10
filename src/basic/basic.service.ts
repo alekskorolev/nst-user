@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { genSalt, hash, compare } from 'bcrypt';
-import { CreateCredentialDto } from './credential.dto';
+import { CreateCredentialDto, CredentialDto, TokenDto } from './credential.dto';
 import { Credential } from './credentisl.entity';
 import { Profile } from 'src/profile/profile.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class BasicService {
@@ -13,6 +14,10 @@ export class BasicService {
 
   @InjectRepository(Profile)
   private readonly profileRepo: Repository<Profile>;
+
+  constructor(
+    private jwtService: JwtService
+  ) {}
 
   public async create({
     login,
@@ -38,16 +43,24 @@ export class BasicService {
   public async validate({
     login,
     password,
-  }: CreateCredentialDto): Promise<boolean> {
+  }: CreateCredentialDto): Promise<CredentialDto|null> {
     const credential = await this.repository.findOne({
       where: { login },
       relations: { profile: true },
     });
     console.log(credential);
     if (!credential) {
-      return false;
+      return null;
     }
-    const valid = await compare(password, credential.password);
-    return valid;
+    const { password: pwd, ...user} = credential;
+    const valid = await compare(password, pwd);
+    return valid ? user : null;
+  }
+
+  public async login(user: CredentialDto): Promise<TokenDto> {
+    const payload = { username: user.login, sub: user.profile.id }
+    return {
+      access_token: await this.jwtService.signAsync(payload)
+    }
   }
 }

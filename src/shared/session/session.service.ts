@@ -8,6 +8,7 @@ export class SessionConfigService implements JwtOptionsFactory {
   private readonly config: ConfigService;
 
   public createJwtOptions(): JwtModuleOptions {
+    // console.log(this.config.get('SESSION_EXPIRATION'))
     return {
       signOptions: {
         expiresIn: this.config.get('SESSION_EXPIRATION'),
