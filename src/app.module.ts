@@ -7,9 +7,7 @@ import { BasicModule } from './basic/basic.module';
 import { ProfileModule } from './profile/profile.module';
 import { getEnvPath } from './common/helper/env.helper';
 import { TypeOrmConfigService } from './shared/typeorm/typeorm.service';
-import { JwtModule } from '@nestjs/jwt';
-import { SessionConfigService } from './shared/session/session.service';
-import { JwtStrategy } from './guards/jwt.strategy';
+import { JwtAuthModule } from './jwt/jwt.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/../common/envs`);
 console.log(envFilePath);
@@ -18,11 +16,11 @@ console.log(envFilePath);
   imports: [
     ConfigModule.forRoot({ envFilePath, isGlobal: true }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
-    JwtModule.registerAsync({ useClass: SessionConfigService }),
     BasicModule,
-    ProfileModule
+    ProfileModule,
+    JwtAuthModule
   ],
   controllers: [AppController],
-  providers: [SessionConfigService, AppService, JwtStrategy]
+  providers: [AppService]
 })
 export class AppModule {}

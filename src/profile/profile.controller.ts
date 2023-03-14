@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Inject, Param, Post, Request, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/jwt/jwt.guard';
 import { CreateProfileDto } from './profile.dto';
 import { Profile } from './profile.entity';
 import { ProfileService } from './profile.service';
@@ -8,6 +8,7 @@ import { ProfileService } from './profile.service';
 export class ProfileController {
   @Inject(ProfileService)
   private readonly service: ProfileService;
+
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')

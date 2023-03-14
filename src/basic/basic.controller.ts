@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Inject, Post, Request, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
-import { LocalAuthGuard } from 'src/guards/local-auth.guard';
+import { JwtAuthGuard } from 'src/jwt/jwt.guard';
+import { BasicGuard } from './basic.guard';
+import { JwtAuthService } from 'src/jwt/jwt.service';
 import { BasicService } from './basic.service';
 import { CreateCredentialDto, CredentialDto, TokenDto } from './credential.dto';
 
@@ -9,16 +10,19 @@ export class BasicController {
   @Inject(BasicService)
   private readonly service: BasicService;
 
+  @Inject(JwtAuthService)
+  private readonly jwtAuthService: JwtAuthService;
+
   @UseGuards(JwtAuthGuard)
   @Get()
   getSession(@Request() req) {
     return req.user;
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(BasicGuard)
   @Post('auth')
   public async auth(@Request() req): Promise<TokenDto> {
-    return this.service.login(req.user)
+    return this.jwtAuthService.login(req.user)
   }
 
   @Post('register')
