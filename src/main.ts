@@ -23,6 +23,7 @@ async function bootstrap() {
     }
   })
   app.startAllMicroservices();
+  app.enableCors();
   await app.listen(port, () => {
     console.log('[WEB]', config.get<string>('BASE_URL'));
   });
